@@ -2,7 +2,6 @@
 
 import {
   Award,
-  BarChart3,
   BriefcaseBusiness,
   GraduationCap,
   Layers3,
@@ -57,6 +56,16 @@ const warmCool = [
   "#B88352",
   "#6D8B8E",
   "#E2C36B",
+];
+
+const jobColors = [
+  palette.teal,
+  palette.sage,
+  "#6D8B8E",
+  palette.terracotta,
+  "#B88352",
+  "#E2C36B",
+  palette.mustard,
 ];
 
 function formatNumber(value: number) {
@@ -115,7 +124,7 @@ function Panel({
 }) {
   return (
     <section className={`panel flex min-h-0 flex-col p-3 ${className}`}>
-      <div className="mb-2 flex shrink-0 items-start justify-between gap-3">
+      <div className="mb-1.5 flex shrink-0 items-start justify-between gap-3">
         <div>
           {eyebrow ? (
             <p className="mb-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-champagne/70">
@@ -143,10 +152,10 @@ function StatCard({
   accent: string;
 }) {
   return (
-    <div className="rounded-lg border border-champagne/12 bg-white/[0.045] p-2.5">
-      <div className="mb-1.5 h-1 w-10 rounded-full" style={{ backgroundColor: accent }} />
+    <div className="rounded-lg border border-champagne/12 bg-white/[0.045] p-2">
+      <div className="mb-1 h-1 w-10 rounded-full" style={{ backgroundColor: accent }} />
       <p className="text-xs text-white/65">{label}</p>
-      <p className="mt-0.5 text-xl font-black text-white">{value}</p>
+      <p className="text-xl font-black leading-tight text-white">{value}</p>
     </div>
   );
 }
@@ -169,12 +178,13 @@ function HorizontalBars({
           type="category"
           dataKey="name"
           width={116}
+          interval={0}
           tickLine={false}
           axisLine={false}
           tick={{ fill: "rgba(255,255,255,0.76)", fontSize: 11 }}
         />
         <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-        <Bar dataKey="value" radius={[0, 5, 5, 0]} barSize={12}>
+        <Bar dataKey="value" radius={[0, 5, 5, 0]} barSize={14}>
           {data.map((_, index) => (
             <Cell key={index} fill={colors[index % colors.length]} />
           ))}
@@ -192,21 +202,68 @@ function HorizontalBars({
   );
 }
 
+function BarTopLabel({
+  x,
+  y,
+  width,
+  value,
+}: {
+  x?: number | string;
+  y?: number | string;
+  width?: number | string;
+  value?: number | string;
+}) {
+  const numericValue = Number(value);
+  if (!numericValue) return null;
+
+  return (
+    <text
+      x={Number(x) + Number(width) / 2}
+      y={Number(y) - 4}
+      fill={palette.white}
+      fontSize={10}
+      fontWeight={700}
+      textAnchor="middle"
+    >
+      {formatNumber(numericValue)}
+    </text>
+  );
+}
+
 function VerticalBars({ data }: { data: Datum[] }) {
   return (
     <ResponsiveContainer width="100%" height="100%">
-      <BarChart data={data} margin={{ top: 8, right: 8, left: -24, bottom: 0 }}>
+      <BarChart data={data} margin={{ top: 18, right: 8, left: -24, bottom: 0 }}>
         <CartesianGrid vertical={false} stroke={palette.grid} />
         <XAxis dataKey="name" tickLine={false} axisLine={false} interval={0} tick={{ fontSize: 10 }} />
         <YAxis tickLine={false} axisLine={false} tickFormatter={formatNumber} tick={{ fontSize: 10 }} />
         <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-        <Bar dataKey="value" radius={[5, 5, 0, 0]} barSize={16}>
+        <Bar dataKey="value" radius={[5, 5, 0, 0]} barSize={16} label={<BarTopLabel />}>
           {data.map((_, index) => (
             <Cell key={index} fill={index === 7 ? palette.mustard : warmCool[index % warmCool.length]} />
           ))}
         </Bar>
       </BarChart>
     </ResponsiveContainer>
+  );
+}
+
+function CompactLegend({ data, colors }: { data: Datum[]; colors: string[] }) {
+  return (
+    <div className="grid content-center gap-0.5">
+      {data.map((item, index) => (
+        <div key={item.name} className="flex min-w-0 items-center gap-1.5 rounded bg-white/[0.035] px-1.5 py-0.5">
+          <span
+            className="h-2 w-2 shrink-0 rounded-sm"
+            style={{ backgroundColor: colors[index % colors.length] }}
+          />
+          <span className="min-w-0 flex-1 text-[9px] leading-[1.05] text-white/68" title={item.name}>
+            {item.name}
+          </span>
+          <span className="text-[9px] font-black text-white">{formatNumber(item.value)}</span>
+        </div>
+      ))}
+    </div>
   );
 }
 
@@ -227,27 +284,22 @@ export default function DashboardPage() {
     .reduce((sum, item) => sum + item.value, 0);
 
   return (
-    <main className="mx-auto flex h-screen min-h-[680px] w-full max-w-[1800px] flex-col overflow-hidden px-4 py-3">
-      <header className="mb-3 flex shrink-0 gap-4 border-b border-champagne/15 pb-3 lg:items-end lg:justify-between">
+    <main className="mx-auto flex h-screen min-h-[680px] w-full max-w-[1800px] flex-col overflow-hidden px-3 py-2.5">
+      <header className="mb-2.5 flex shrink-0 items-end justify-between gap-4 border-b border-champagne/15 pb-2.5">
         <div>
           <p className="mb-1 text-xs font-bold uppercase tracking-[0.22em] text-champagne/75">
             Pemerintah Kabupaten Magetan
           </p>
-          <h1 className="max-w-4xl text-3xl font-black uppercase leading-none text-champagne 2xl:text-4xl">
+          <h1 className="max-w-4xl text-[2rem] font-black uppercase leading-none text-champagne 2xl:text-4xl">
             Dashboard ASN Kabupaten Magetan
           </h1>
         </div>
-        <div className="grid min-w-[700px] grid-cols-6 gap-2">
+        <div className="w-[150px] shrink-0">
           <StatCard label="Total ASN" value={formatNumber(totalAsn)} accent={palette.mustard} />
-          <StatCard label="PNS" value={formatNumber(pns)} accent={palette.terracotta} />
-          <StatCard label="PPPK" value={formatNumber(pppk)} accent={palette.teal} />
-          <StatCard label="Guru" value={formatNumber(functionalTeacher)} accent={palette.sage} />
-          <StatCard label="Fungsional" value={formatNumber(functionalTotal)} accent={palette.mustard} />
-          <StatCard label="S1-S3" value={formatNumber(bachelorUp)} accent={palette.teal} />
         </div>
       </header>
 
-      <div className="grid min-h-0 flex-1 grid-cols-12 grid-rows-[1fr_1fr_0.9fr] gap-3">
+      <div className="grid min-h-0 flex-1 grid-cols-12 grid-rows-[1fr_1fr_0.92fr] gap-2.5">
         <Panel
           className="col-span-3 row-span-1"
           title="Jenis Kelamin"
@@ -296,28 +348,64 @@ export default function DashboardPage() {
           </div>
         </Panel>
 
-        <Panel className="col-span-4 row-span-1" title="Jenis Jabatan" eyebrow="Sebaran Jabatan" icon={<BriefcaseBusiness size={18} />}>
-          <div className="h-full min-h-0">
-            <HorizontalBars
-              data={jobData}
-              colors={[
-                palette.teal,
-                palette.sage,
-                "#6D8B8E",
-                palette.terracotta,
-                "#B88352",
-                "#E2C36B",
-                palette.mustard,
-              ]}
-            />
+        <Panel className="col-span-6 row-span-1" title="Jenis Jabatan" eyebrow="Sebaran Jabatan" icon={<BriefcaseBusiness size={18} />}>
+          <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_170px] gap-2">
+            <div className="min-h-0">
+              <HorizontalBars data={jobData} colors={jobColors} />
+            </div>
+            <CompactLegend data={jobData} colors={jobColors} />
           </div>
         </Panel>
 
-        <Panel className="col-span-2 row-span-1" title="Kualitas Data" eyebrow="Nilai 99,17%" icon={<Award size={18} />}>
-          <div className="grid h-full min-h-0 grid-rows-[auto_1fr] gap-2">
-            <div className="rounded-md bg-white/[0.045] p-2 text-center">
-              <p className="text-2xl font-black leading-none text-champagne">{formatPercent(qualityScore)}</p>
-              <p className="mt-0.5 text-[9px] uppercase tracking-[0.16em] text-white/55">Indeks</p>
+        <Panel className="col-span-7 row-span-1" title="Pangkat / Golongan Ruang" eyebrow="Distribusi Golongan" icon={<Medal size={18} />}>
+          <div className="h-full min-h-0">
+            <VerticalBars data={rankData} />
+          </div>
+        </Panel>
+
+        <Panel className="col-span-5 row-span-1" title="Pejabat Struktural Berdasar Eselon" eyebrow="Existing vs Bezzeting" icon={<Layers3 size={18} />}>
+          <div className="h-full min-h-0">
+            <ResponsiveContainer width="100%" height="100%">
+              <ComposedChart data={eselonData} margin={{ top: 18, right: 4, left: -24, bottom: 0 }}>
+                <CartesianGrid vertical={false} stroke={palette.grid} />
+                <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
+                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
+                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
+                <Legend iconType="square" wrapperStyle={{ color: palette.muted, fontSize: 12 }} />
+                <Bar
+                  name="Existing"
+                  dataKey="existing"
+                  fill={palette.terracotta}
+                  radius={[5, 5, 0, 0]}
+                  barSize={18}
+                  label={<BarTopLabel />}
+                />
+                <Bar name="Bezzeting" dataKey="bezzeting" radius={[5, 5, 0, 0]} barSize={18} label={<BarTopLabel />}>
+                  {eselonData.map((item) => (
+                    <Cell
+                      key={item.name}
+                      fill={item.name === "IV.b" ? palette.sage : item.name === "II.a" ? palette.mustard : palette.teal}
+                    />
+                  ))}
+                </Bar>
+              </ComposedChart>
+            </ResponsiveContainer>
+          </div>
+        </Panel>
+
+        <Panel className="col-span-9 row-span-1" title="Tingkat Pendidikan" eyebrow={`Terbesar: ${topEducation.name}`} icon={<GraduationCap size={18} />}>
+          <div className="h-full min-h-0">
+            <VerticalBars data={educationData} />
+          </div>
+        </Panel>
+
+        <Panel className="col-span-3 row-span-1" title="Kualitas Data" eyebrow="Nilai 99,17%" icon={<Award size={18} />}>
+          <div className="grid h-full min-h-0 grid-cols-[120px_1fr] gap-2">
+            <div className="grid place-items-center rounded-md bg-white/[0.045] p-2 text-center">
+              <div>
+                <p className="text-3xl font-black leading-none text-champagne">{formatPercent(qualityScore)}</p>
+                <p className="mt-1 text-[9px] uppercase tracking-[0.16em] text-white/55">Indeks</p>
+              </div>
             </div>
             <div className="grid min-h-0 content-between gap-1">
               {qualityData.map((item, index) => (
@@ -331,41 +419,6 @@ export default function DashboardPage() {
                 </div>
               ))}
             </div>
-          </div>
-        </Panel>
-
-        <Panel className="col-span-7 row-span-1" title="Pangkat / Golongan Ruang" eyebrow="Distribusi Golongan" icon={<Medal size={18} />}>
-          <div className="h-full min-h-0">
-            <VerticalBars data={rankData} />
-          </div>
-        </Panel>
-
-        <Panel className="col-span-5 row-span-1" title="Pejabat Struktural Berdasar Eselon" eyebrow="Existing vs Bezzeting" icon={<Layers3 size={18} />}>
-          <div className="h-full min-h-0">
-            <ResponsiveContainer width="100%" height="100%">
-              <ComposedChart data={eselonData} margin={{ top: 4, right: 4, left: -24, bottom: 0 }}>
-                <CartesianGrid vertical={false} stroke={palette.grid} />
-                <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
-                <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-                <Legend iconType="square" wrapperStyle={{ color: palette.muted, fontSize: 12 }} />
-                <Bar name="Existing" dataKey="existing" fill={palette.terracotta} radius={[5, 5, 0, 0]} barSize={18} />
-                <Bar name="Bezzeting" dataKey="bezzeting" radius={[5, 5, 0, 0]} barSize={18}>
-                  {eselonData.map((item) => (
-                    <Cell
-                      key={item.name}
-                      fill={item.name === "IV.b" ? palette.sage : item.name === "II.a" ? palette.mustard : palette.teal}
-                    />
-                  ))}
-                </Bar>
-              </ComposedChart>
-            </ResponsiveContainer>
-          </div>
-        </Panel>
-
-        <Panel className="col-span-12 row-span-1" title="Tingkat Pendidikan" eyebrow={`Terbesar: ${topEducation.name}`} icon={<GraduationCap size={18} />}>
-          <div className="h-full min-h-0">
-            <VerticalBars data={educationData} />
           </div>
         </Panel>
       </div>

@@ -26,8 +26,8 @@ export const jobData: Datum[] = [
   { name: "Administrator", value: 164 },
   { name: "Pengawas", value: 330 },
   { name: "Pelaksana", value: 2626 },
-  { name: "Fungsional Teknis Lainnya", value: 443 },
-  { name: "Fungsional Kesehatan", value: 1852 },
+  { name: "Fungsional Teknis Lainnya", value: 442 },
+  { name: "Fungsional Kesehatan", value: 1853 },
   { name: "Fungsional Guru", value: 4469 },
 ];
 

@@ -22,12 +22,12 @@ export const statusData: Datum[] = [
 ];
 
 export const jobData: Datum[] = [
-  { name: "JPT Pratama", value: 25 },
+  { name: "JPT Pratama", value: 26 },
   { name: "Administrator", value: 164 },
-  { name: "Pengawas", value: 330 },
-  { name: "Pelaksana", value: 2626 },
-  { name: "Fungsional Teknis Lainnya", value: 442 },
-  { name: "Fungsional Kesehatan", value: 1853 },
+  { name: "Pengawas", value: 333 },
+  { name: "Pelaksana", value: 2627 },
+  { name: "Fungsional Teknis Lainnya", value: 438 },
+  { name: "Fungsional Kesehatan", value: 1852 },
   { name: "Fungsional Guru", value: 4469 },
 ];
 
@@ -62,11 +62,11 @@ export const rankData: Datum[] = [
 
 export const eselonData: EselonDatum[] = [
   { name: "II.a", existing: 1, bezzeting: 1 },
-  { name: "II.b", existing: 24, bezzeting: 32 },
+  { name: "II.b", existing: 25, bezzeting: 32 },
   { name: "III.a", existing: 59, bezzeting: 63 },
   { name: "III.b", existing: 105, bezzeting: 106 },
-  { name: "IV.a", existing: 189, bezzeting: 198 },
-  { name: "IV.b", existing: 141, bezzeting: 160 },
+  { name: "IV.a", existing: 191, bezzeting: 198 },
+  { name: "IV.b", existing: 142, bezzeting: 160 },
 ];
 
 export const educationData: Datum[] = [

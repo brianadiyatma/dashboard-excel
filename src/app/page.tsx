@@ -348,7 +348,7 @@ export default function DashboardPage() {
           </div>
         </Panel>
 
-        <Panel className="col-span-6 row-span-1" title="Jenis Jabatan" eyebrow="Sebaran Jabatan" icon={<BriefcaseBusiness size={18} />}>
+        <Panel className="col-span-6 row-span-1" title="Pejabat Fungsional dan Pelaksana" eyebrow="Sebaran Pejabat" icon={<BriefcaseBusiness size={18} />}>
           <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_170px] gap-2">
             <div className="min-h-0">
               <HorizontalBars data={jobData} colors={jobColors} />
@@ -363,7 +363,7 @@ export default function DashboardPage() {
           </div>
         </Panel>
 
-        <Panel className="col-span-5 row-span-1" title="Pejabat Struktural Berdasar Eselon" eyebrow="Existing vs Bezzeting" icon={<Layers3 size={18} />}>
+        <Panel className="col-span-5 row-span-1" title="Pejabat Struktural Berdasar Eselon" eyebrow="Bezzeting vs Kebutuhan" icon={<Layers3 size={18} />}>
           <div className="h-full min-h-0">
             <ResponsiveContainer width="100%" height="100%">
               <ComposedChart data={eselonData} margin={{ top: 18, right: 4, left: -24, bottom: 0 }}>
@@ -371,20 +371,20 @@ export default function DashboardPage() {
                 <XAxis dataKey="name" tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
                 <YAxis tickLine={false} axisLine={false} tick={{ fontSize: 10 }} />
                 <Tooltip content={<ChartTooltip />} cursor={{ fill: "rgba(255,255,255,0.04)" }} />
-                <Legend iconType="square" wrapperStyle={{ color: palette.muted, fontSize: 12 }} />
+                <Legend iconType="square" wrapperStyle={{ color: palette.sage, fontSize: 12 }} />
                 <Bar
-                  name="Existing"
+                  name="Bezzeting"
                   dataKey="existing"
                   fill={palette.terracotta}
                   radius={[5, 5, 0, 0]}
                   barSize={18}
                   label={<BarTopLabel />}
                 />
-                <Bar name="Bezzeting" dataKey="bezzeting" radius={[5, 5, 0, 0]} barSize={18} label={<BarTopLabel />}>
+                <Bar name="Kebutuhan" dataKey="bezzeting" radius={[5, 5, 0, 0]} barSize={18} label={<BarTopLabel />} fill={palette.sage}>
                   {eselonData.map((item) => (
                     <Cell
                       key={item.name}
-                      fill={item.name === "IV.b" ? palette.sage : item.name === "II.a" ? palette.mustard : palette.teal}
+                      fill={palette.sage}
                     />
                   ))}
                 </Bar>

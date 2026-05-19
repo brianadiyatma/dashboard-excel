@@ -22,9 +22,9 @@ export const statusData: Datum[] = [
 ];
 
 export const jobData: Datum[] = [
-  { name: "JPT Pratama", value: 26 },
-  { name: "Administrator", value: 164 },
-  { name: "Pengawas", value: 333 },
+  // { name: "JPT Pratama", value: 26 },
+  // { name: "Administrator", value: 164 },
+  // { name: "Pengawas", value: 333 },
   { name: "Pelaksana", value: 2627 },
   { name: "Fungsional Teknis Lainnya", value: 438 },
   { name: "Fungsional Kesehatan", value: 1852 },
@@ -81,5 +81,7 @@ export const educationData: Datum[] = [
   { name: "S2", value: 297 },
   { name: "S3", value: 1 },
 ];
+
+
 
 export const totalAsn = statusData.reduce((sum, item) => sum + item.value, 0);

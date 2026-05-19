@@ -348,7 +348,7 @@ export default function DashboardPage() {
           </div>
         </Panel>
 
-        <Panel className="col-span-6 row-span-1" title="Pejabat Fungsional dan Pelaksana" eyebrow="Sebaran Pejabat" icon={<BriefcaseBusiness size={18} />}>
+        <Panel className="col-span-6 row-span-1" title="Pejabat Fungsional dan Pelaksana" icon={<BriefcaseBusiness size={18} />}>
           <div className="grid h-full min-h-0 grid-cols-[minmax(0,1fr)_170px] gap-2">
             <div className="min-h-0">
               <HorizontalBars data={jobData} colors={jobColors} />
